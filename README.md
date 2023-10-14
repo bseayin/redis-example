@@ -36,6 +36,7 @@ Sorted Sets（有序集合）：和散列类似，主要区别是有序集合是
 - Redis下载:http://redis.io/download
 - redis英文文档 https://redis.io/topics/data-types
 - redis中文文档 http://www.redis.cn/documentation.
+- 博客 https://blog.csdn.net/h356363/category_8930846.html
 
 #### QA 相关问题
 
