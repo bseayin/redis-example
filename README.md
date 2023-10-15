@@ -12,7 +12,8 @@ edis 是一个开源（BSD 许可）的，内存中的数据结构存储系统�
 
 下载地址：https://github.com/tporadowski/redis/releases。
 
-
+![选择压缩文件](image/redisdown.png)
+![启动成功](image/redisdown2.png)
 - Linux 源码安装
 
 下载地址：http://redis.io/download，下载最新稳定版本。
