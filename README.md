@@ -6,6 +6,65 @@
 edis 是一个开源（BSD 许可）的，内存中的数据结构存储系统，它可以用作数据库、缓存和消息中间件。
  它支持多种类型的数据结构，如 字符串（strings）， 散列（hashes）， 列表（lists）， 集合（sets）， 有序集合（sorted sets） 与范围查询， bitmaps， hyperloglogs 和 地理空间（geospatial） 索引半径查询。
  Redis 内置了 复制（replication），LUA 脚本（Lua scripting）， LRU 驱动事件（LRU eviction），事务（transactions） 和不同级别的 磁盘持久化（persistence）， 并通过 Redis 哨兵（Sentinel）和自动 分区（Cluster）提供高可用性（high availability）。
+##### Redis 安装
+
+- Windows 下安装
+
+下载地址：https://github.com/tporadowski/redis/releases。
+
+
+- Linux 源码安装
+
+下载地址：http://redis.io/download，下载最新稳定版本。
+
+
+本教程使用的最新文档版本为 2.8.17，下载并安装：
+```
+# wget http://download.redis.io/releases/redis-6.0.8.tar.gz
+# tar -xzvf redis-6.0.8.tar.gz
+# cd redis-6.0.8
+# make
+```
+执行完 make 命令后，redis-6.0.8 的 src 目录下会出现编译后的 redis 服务程序 redis-server，还有用于测试的客户端程序 redis-cli：
+
+下面启动 redis 服务：
+```
+# cd src
+# ./redis-server
+```
+注意这种方式启动 redis 使用的是默认配置。也可以通过启动参数告诉 redis 使用指定配置文件使用下面命令启动。
+```
+# cd src
+# ./redis-server ../redis.conf
+```
+redis.conf 是一个默认的配置文件。我们可以根据需要使用自己的配置文件。
+
+启动 redis 服务进程后，就可以使用测试客户端程序 redis-cli 和 redis 服务交互了。 比如：
+```
+# cd src
+# ./redis-cli
+redis> set foo bar
+OK
+redis> get foo
+"bar"
+```
+Ubuntu apt 命令安装
+在 Ubuntu 系统安装 Redis 可以使用以下命令:
+```
+# sudo apt update
+# sudo apt install redis-server
+启动 Redis
+# redis-server
+查看 redis 是否启动？
+# redis-cli
+以上命令将打开以下终端：
+
+redis 127.0.0.1:6379>
+127.0.0.1 是本机 IP ，6379 是 redis 服务端口。现在我们输入 PING 命令。
+
+redis 127.0.0.1:6379> ping
+PONG
+```
 ##### Redis的数据结构
 Redis支持以下五种数据结构：
 
@@ -31,7 +90,7 @@ Redis支持以下五种数据结构：
 #### 学习资料
 - Redis官网:http://redis.io/
 - Redis官方文档:http://redis.io/documentation
-- Redis教程:http://www.w3cschool.cn/redis/redis-intro.html
+- Redis教程:https://www.runoob.com/redis/redis-tutorial.html
 - Redis下载:http://redis.io/download
 - redis英文文档 https://redis.io/topics/data-types
 - redis中文文档 http://www.redis.cn/documentation.
