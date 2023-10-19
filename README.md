@@ -13,6 +13,9 @@ edis 是一个开源（BSD 许可）的，内存中的数据结构存储系统�
 下载地址：https://github.com/tporadowski/redis/releases。
 
 ![选择压缩文件](image/redisdown.png)
+
+双击 redis-server.exe
+
 ![启动成功](image/redisdown2.png)
 - Linux 源码安装
 
@@ -88,6 +91,25 @@ Redis支持以下五种数据结构：
 - 计数器：播放数、浏览数
 - 社交网络：赞、踩、粉丝、下拉刷新
 - 消息队列：发布订阅
+
+#####  Redis客户端-Jedis
+
+Jedis String(字符串) 实例
+```
+import redis.clients.jedis.Jedis;
+ 
+public class RedisStringJava {
+    public static void main(String[] args) {
+        //连接本地的 Redis 服务
+        Jedis jedis = new Jedis("localhost");
+        System.out.println("连接成功");
+        //设置 redis 字符串数据
+        jedis.set("name", "test");
+        // 获取存储的数据并输出
+        System.out.println("redis 存储的字符串为: "+ jedis.get("name"));
+    }
+}
+```
 #### 学习资料
 - Redis官网:http://redis.io/
 - Redis官方文档:http://redis.io/documentation
