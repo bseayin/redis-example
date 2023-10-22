@@ -164,6 +164,7 @@ Cache Aside、Read Through、Write Through 和 Write Back 的步骤过程如下�
 - 读取数据时，先查询缓存，如果命中缓存，则直接返回数据。
 - 如果未命中缓存，则查询数据库，并将查询结果放入缓存。
 - 更新数据时，只更新缓存，将缓存中的数据标记为脏数据（需要同步到数据库的数据），并不立即同步到数据库中。
+![Write Back](image/write back.png)
 
 Cache Aside、Read Through、Write Through 和 Write Back 都是缓存策略，它们有各自的优缺点和使用场景。
 
