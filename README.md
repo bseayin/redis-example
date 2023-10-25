@@ -2,11 +2,11 @@
 
 #### 课程介绍
 目标是提供一个高效、可靠的学习和实践Redis的环境。我们将通过搭建Redis集群、实现缓存数据的持久化存储、制定缓存数据的淘汰策略以及同步缓存数据等步骤来深入了解和学习Redis的特性和功能。通过这个项目，你可以掌握Redis的核心概念和技术，并能够熟练地将其应用到实际的开发工作中。无论你是初学者还是有一定经验的开发者，都可以从这个项目中获得收获和成长。欢迎加入我们的行列，一起学习Redis！
-#### 1.Redis介绍
+#### 第一章.Redis介绍
 Redis 是一个开源（BSD 许可）的，内存中的数据结构存储系统，它可以用作数据库、缓存和消息中间件。
  它支持多种类型的数据结构，如 字符串（strings）， 散列（hashes）， 列表（lists）， 集合（sets）， 有序集合（sorted sets） 与范围查询， bitmaps， hyperloglogs 和 地理空间（geospatial） 索引半径查询。
  Redis 内置了 复制（replication），LUA 脚本（Lua scripting）， LRU 驱动事件（LRU eviction），事务（transactions） 和不同级别的 磁盘持久化（persistence）， 并通过 Redis 哨兵（Sentinel）和自动 分区（Cluster）提供高可用性（high availability）。
-#### 2.Redis 安装
+#### 第二章.Redis 安装
 
 - Windows 下安装
 
@@ -69,7 +69,7 @@ redis 127.0.0.1:6379>
 redis 127.0.0.1:6379> ping
 PONG
 ```
-#### 3. Redis的数据结构
+#### 第三章. Redis的数据结构
 Redis支持以下五种数据结构：
 
 - String（字符串）：最简单的类型，可以理解为与Memcached一模一样的类型，一个key对应一个value。
@@ -78,21 +78,62 @@ Redis支持以下五种数据结构：
 - Hash（散列）：可以存储多个键值对之间的映射，键的类型必须为字符串，而值的类型既可以是字符串也可以是数字，但是值必须是唯一的，不可重复。
 - Sorted Sets（有序集合）：和散列类似，主要区别是有序集合是按照值进行自动排序的。
 
-#### 4. Redis缓存特性
+#### 第四章. Redis缓存特性
 - 速度快，读写性能 10W/s，当然了和机器配置也有关系为什么快呢？内存操作，C语言实现，离操作系统API更近；单线程架构（务必不要记错），避免了多线程竞争带来的损耗。IO多路复用，协议简单。
 - 支持持久化，虽然是交互时是内存操作，但提供数据落盘机制，防止断电产生的数据丢失问题。
 - 支持主从复制：多副本 Master-Slave 节点
 - 支持高可用 HA：哨兵（sentinel）机制实现高可用，保证节点故障自动发现和故障转移
 - 支持多客户端语言：Java、Python、C++等。
 
-#### 5. Redis使用场景
+#### 第五章. Redis使用场景
 - 缓存：数据库之前加缓存，降低数据库读写压力
 - 排行榜：按照热度排名、按照发布时间排名
 - 计数器：播放数、浏览数
 - 社交网络：赞、踩、粉丝、下拉刷新
 - 消息队列：发布订阅
 
-#### 6. Redis客户端-Jedis
+#### 第六章. Redis客户端-Jedis
+
+
+##### Jedis对各种数据类型的API列表  
+  
+###### String类型  
+- set(String key, String value)：设置键为字符串值。  
+- get(String key)：获取指定键的值。  
+- getSet(String key, String value)：设置键为字符串值，并返回旧值。  
+- append(String key, String value)：将值追加到指定键的末尾。  
+- substr(String key, int start, int end)：获取指定键的子字符串。  
+- incr(String key)：将指定键的值加1。  
+- decr(String key)：将指定键的值减1。  
+- mset(String... keysvalues)：同时设置多个键值对。  
+- mget(String... keys)：获取多个键的值。  
+  
+###### Hash类型  
+- hset(String key, String field, String value)：在哈希表中设置字段和值。  
+- hget(String key, String field)：获取哈希表中指定字段的值。  
+- hgetAll(String key)：获取哈希表中所有字段和值。  
+- hdel(String key, String... fields)：删除哈希表中指定的字段。  
+  
+###### List类型  
+- lpush(String key, String... values)：将一个或多个值插入到列表的头部。  
+- rpush(String key, String... values)：将一个或多个值插入到列表的尾部。  
+- lpop(String key)：移除并返回列表的第一个元素。  
+- rpop(String key)：移除并返回列表的最后一个元素。  
+- llen(String key)：返回列表的长度。  
+  
+###### Set类型  
+- sadd(String key, String... values)：将一个或多个值添加到集合中。  
+- srem(String key, String... values)：从集合中移除一个或多个值。  
+- spop(String key)：从集合中随机移除并返回一个元素。  
+- scard(String key)：返回集合中的元素个数。  
+- sismember(String key, String member)：判断给定的元素是否存在于集合中。  
+  
+###### Sorted Set类型  
+- zadd(String key, double score, String member)：将一个成员及其分值添加到有序集合中。  
+- zrangeByScore(String key, double startScore, double endScore)：返回有序集合中指定分值范围内的成员。  
+- zrem(String key, String... members)：从有序集合中移除指定的成员。  
+- zcard(String key)：返回有序集合中的成员个数。
+
 
 Jedis String(字符串) 实例
 ```
@@ -110,7 +151,7 @@ public class RedisStringJava {
     }
 }
 ```
-####  7. Jedis Pipeline
+####  第七章. Jedis Pipeline
 Jedis的pipeline实现基于Redis的协议规范，可以将多个命令发送到Redis服务器，并且无需等待每个命令的回复，而是在所有命令都发送完毕后，一次性获取所有的回复。
 
 具体实现上，Jedis将多个命令放入一个列表中，然后通过pipeline.sync()或pipeline.close()将所有命令一次性发送到Redis服务器。在服务器端，所有的命令会被依次执行，并记录每个命令的执行结果。当所有的命令都执行完毕后，Jedis会一次性获取所有的执行结果，并返回给客户端。
@@ -139,7 +180,7 @@ Jedis的pipeline支持所有基本的Redis命令，包括但不限于以下类�
 - Lua脚本命令：例如EVAL, EVALSHA等。
 请注意，不是所有的命令都支持pipeline方式执行，比如一些需要多个步骤才能完成的操作，像SUBSCRIBE、PSUBSCRIBE、PUBLISH等命令就不支持pipeline方式执行。对于这些不支持pipeline的命令，你只能一个个单独发送并等待响应。更多细节可以参考Jedis的官方文档或源码。
 
-####  8. Redis缓存策略
+####  第八章. Redis缓存策略
 
 
 Cache Aside、Read Through、Write Through 和 Write Back 的步骤过程如下：
