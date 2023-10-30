@@ -85,6 +85,7 @@ Redis支持以下五种数据结构：
 - 支持高可用 HA：哨兵（sentinel）机制实现高可用，保证节点故障自动发现和故障转移
 - 支持多客户端语言：Java、Python、C++等。
 
+
 #### 第五章. Redis使用场景
 - 缓存：数据库之前加缓存，降低数据库读写压力
 - 排行榜：按照热度排名、按照发布时间排名
@@ -168,7 +169,7 @@ Jedis的pipeline主要有以下特点：
 4. 连接管理：使用pipeline模式时，多个命令被缓存到本地，然后一次性发送到服务器，而不是每执行一个命令就向服务器发送请求，这可以减少客户端与服务器之间的交互次数。
 
 Jedis的pipeline支持所有基本的Redis命令，包括但不限于以下类型：
-好的，以下是Markdown格式的表格内容：
+
 
 - 字符串命令：例如SET, GET, MSET, MGET等。
 - 哈希表命令：例如HSET, HGET, HMSET, HMGET等。
@@ -260,6 +261,87 @@ Cache Aside、Read Through、Write Through 和 Write Back 都是缓存策略，�
 
 在高并发的情况下，可能会出现竞争问题，需要使用锁或者其他同步机制来保证数据的一致性。
 - 使用场景：适合对数据一致性要求不高的场景，例如电商网站、新闻网站等。在使用时需要注意缓存的容量限制和更新频率问题。
+
+####  第九章. Redis Modules目录下的模块和对应的作用
+  
+- RediSearch：一个功能齐全的搜索引擎模块，用于在Redis中实现全文搜索。  
+- RedisJSON：对JSON类型的原生支持，可以存储、查询和操作JSON对象。  
+- RedisTimeSeries：时序数据库支持，可以用于存储时间序列数据，支持灵活的时间窗口和采样操作。  
+- RedisGraph：图数据库支持，可以用于构建和查询图结构。  
+- RedisBloom：概率性数据的原生支持，可以用于快速过滤和查找数据。  
+- RedisGears：可编程的数据处理模块，可以用于构建分布式数据处理管道。  
+- RedisAI：机器学习的实时模型管理和部署模块，可以用于实现机器学习和人工智能应用。  
+- RedisML：推荐系统模块，可以用于构建推荐算法和推荐系统。  
+- Redis-cell：限流模块，可以用于限制Redis操作的频率和次数。
+
+##### RediSearch
+Redis Search 是一个 Redis 模块，它为 Redis 添加了全文搜索功能。它使用 Redis 协议提供了一种简单而高效的方式来执行全文搜索查询，并返回匹配的结果。
+
+Redis Search 模块支持以下功能：
+
+- 创建和更新索引：可以使用 Redis Search 模块创建索引，并将数据添加到索引中。索引可以使用不同的字段和属性进行定义，以便对数据进行分类和过滤。
+- 搜索查询：可以使用 Redis Search 模块执行搜索查询，并返回匹配的结果。搜索查询可以使用不同的查询类型和过滤条件来缩小搜索范围，并提高搜索效率。
+- 排序和分页：Redis Search 模块支持对搜索结果进行排序和分页。可以根据相关性、日期或其他字段对结果进行排序，并可以选择返回特定数量的结果。
+- 聚合和分组：Redis Search 模块支持对搜索结果进行聚合和分组。可以对结果进行分组，计算总和、平均值等统计信息，并可以执行其他聚合操作。
+- 过滤器：Redis Search 模块支持使用过滤器来缩小搜索范围。可以根据特定条件过滤结果，例如根据日期、地理位置或其他属性进行过滤。
+- 动态更新：Redis Search 模块支持动态更新索引和数据。可以随时添加、更新或删除数据，而无需停止或重新创建整个索引。
+要使用 Redis Search，需要安装 Redis Search 模块并将其加载到 Redis 服务器中。然后可以使用 Redis 命令行客户端或 Redis 客户端库与 Redis Search 模块进行交互，执行创建索引、添加数据、执行搜索查询等操作。
+
+使用 Jedis 和 Redis Search，以下是相应的示例代码：
+```
+java
+import redis.clients.jedis.Jedis;  
+import redis.clients.jedis.Response;  
+import redis.clients.jedis.Tuple;  
+import redissearch.ResponseStream;  
+import redissearch.SearchCommandBuilder;  
+import redissearch.SearchCommand;  
+import redissearch.SearchableField;  
+  
+import java.util.HashMap;  
+import java.util.Map;  
+  
+public class RedisSearchDemo {  
+    private static final String INDEX_NAME = "demo_index";  
+    private static final String KEYWORD = "search";  
+  
+    public static void main(String[] args) {  
+        // 创建 Redis 连接  
+        Jedis jedis = new Jedis("localhost");  
+  
+        // 创建索引  
+        SearchableField field = new SearchableField("keyword", null, SearchableFieldOptions.builder().build());  
+        jedis.createIndex(INDEX_NAME, field);  
+  
+        // 添加数据到索引中  
+        Map<String, Object> data1 = new HashMap<>();  
+        data1.put("id", "doc1");  
+        data1.put("keyword", KEYWORD);  
+        data1.put("name", "Document 1");  
+        jedis.addDocumentToIndex(INDEX_NAME, data1);  
+  
+        Map<String, Object> data2 = new HashMap<>();  
+        data2.put("id", "doc2");  
+        data2.put("keyword", KEYWORD);  
+        data2.put("name", "Document 2");  
+        jedis.addDocumentToIndex(INDEX_NAME, data2);  
+  
+        // 执行查询并处理结果  
+        SearchCommand searchCommand = new SearchCommandBuilder()  
+                .addIndex(INDEX_NAME)  
+                .search(KEYWORD)  
+                .build();  
+        ResponseStream<Tuple> responseStream = jedis.executeWithStream(searchCommand);  
+        responseStream.forEach(response -> {  
+            System.out.println("ID: " + response.get("id"));  
+            System.out.println("Name: " + response.get("name"));  
+            System.out.println();  
+        });  
+    }  
+}
+```
+在这个示例中，我们首先创建了一个 Redis 连接，然后使用 Jedis 的 createIndex 方法创建一个索引，用于存储文档数据。接下来，我们使用 addDocumentToIndex 方法将文档数据添加到索引中。然后，我们使用 SearchCommandBuilder 构建一个搜索命令，并指定要搜索的索引和关键字。最后，我们使用 executeWithStream 方法执行搜索命令，并通过 ResponseStream 处理搜索结果。每个搜索结果包含文档的 ID 和名称。
+##### RedisJSON
 
 #### Redis最佳实践
 ##### 1.优雅的key结构
