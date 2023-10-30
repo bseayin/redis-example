@@ -262,7 +262,7 @@ Cache Aside、Read Through、Write Through 和 Write Back 都是缓存策略，�
 在高并发的情况下，可能会出现竞争问题，需要使用锁或者其他同步机制来保证数据的一致性。
 - 使用场景：适合对数据一致性要求不高的场景，例如电商网站、新闻网站等。在使用时需要注意缓存的容量限制和更新频率问题。
 
-####  第九章. Redis Modules目录下的模块和对应的作用
+####  第九章. Redis Modules
   
 - RediSearch：一个功能齐全的搜索引擎模块，用于在Redis中实现全文搜索。  
 - RedisJSON：对JSON类型的原生支持，可以存储、查询和操作JSON对象。  
