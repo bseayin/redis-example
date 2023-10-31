@@ -6,6 +6,31 @@
 Redis 是一个开源（BSD 许可）的，内存中的数据结构存储系统，它可以用作数据库、缓存和消息中间件。
  它支持多种类型的数据结构，如 字符串（strings）， 散列（hashes）， 列表（lists）， 集合（sets）， 有序集合（sorted sets） 与范围查询， bitmaps， hyperloglogs 和 地理空间（geospatial） 索引半径查询。
  Redis 内置了 复制（replication），LUA 脚本（Lua scripting）， LRU 驱动事件（LRU eviction），事务（transactions） 和不同级别的 磁盘持久化（persistence）， 并通过 Redis 哨兵（Sentinel）和自动 分区（Cluster）提供高可用性（high availability）。
+
+##### Redis Java 客户端
+Jedis、Lettuce和Redisson介绍和区别
+
+- Jedis
+
+Jedis是Redis的Java实现客户端，提供了比较全面的Redis命令的支持。
+使用阻塞的I/O，方法调用同步，程序流需要等到socket处理完I/O才能执行，不支持异步操作。
+Jedis客户端实例不是线程安全的，需要通过连接池来使用Jedis。
+适用场景：需要全面支持Redis命令的场景。
+
+- Lettuce
+
+Lettuce是高级Redis客户端，用于线程安全同步、异步和响应使用，支持集群、Sentinel、管道和编码器。
+基于Netty框架的事件驱动的通信层，其方法调用是异步的。Lettuce的API是线程安全的，所以可以操作单个Lettuce连接来完成各种操作。
+Lettuce能够支持redis4，需要java8及以上。是基于netty实现的与redis进行同步和异步的通信。
+适用场景：需要高并发和线程安全性的场景。
+
+- Redisson
+
+Redisson实现了分布式和可扩展的Java数据结构，例如分布式锁、分布式集合等，并可通过Redis支持延迟队列。
+基于Netty框架的事件驱动的通信层，其方法调用是异步的。Redisson的API是线程安全的，所以可以操作单个Redisson连接来完成各种操作。
+支持哨兵、集群、管道、自动重新连接和Redis数据模型等高级特性。
+适用场景：需要分布式和可扩展功能的场景。在选择时，需要根据具体需求和场景进行选择。
+
 #### 第二章.Redis 安装
 
 - Windows 下安装
